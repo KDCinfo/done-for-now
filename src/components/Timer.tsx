@@ -37,8 +37,6 @@ class Timer extends React.Component<TimerProps, {}> {
         super(props);
         this.toggleTimeout = this.toggleTimeout.bind(this);
         this.removeTimer = this.removeTimer.bind(this);
-        this.toggleTimeout = this.toggleTimeout.bind(this);
-        this.removeTimer = this.removeTimer.bind(this);
     }
     toggleTimeout() {
         this.props.toggleTimeout(this.props.entry.id, this.props.entry.active ? 'off' : 'on');
@@ -52,33 +50,61 @@ class Timer extends React.Component<TimerProps, {}> {
         const timeoutEntry = this.props.timeoutList.find( (elem) => elem.id === this.props.entry.id),
               timerDisplayEntry = (timeoutEntry) ? this.props.timerDisplayList.find(
                   (elem: {id: number}) => elem.id === timeoutEntry.timer) : null,
-              timeDisplay = (timerDisplayEntry) ? timerDisplayEntry.destination : 0;
+              timeDisplay = (timerDisplayEntry) ? timerDisplayEntry.destination : 0,
+              timerIsX2b = this.props.entry.title.substr(0, 4) === 'x2b-',
+              timerTitleX2B = (
+                    <small style={{ opacity: 0.5 }}>
+                        This is an&nbsp;
+                        <a
+                            href="https://kdcinfo.github.io/expired-to-be/"
+                            target="kdcNewWindow"
+                            title="Expired To Be is an expiration reminder app with alarms (instead of timers)."
+                        >Expired To Be
+                        </a> alarm
+                    </small>
+                );
+        let timerTDs;
+
+        if (timerIsX2b) {
+            timerTDs = (
+                <tr>
+                    <td><small style={{ opacity: 0.75 }}>{this.props.entry.title}</small></td>
+                    <td colSpan={5}>{timerTitleX2B}</td>
+                </tr>
+            );
+        } else {
+            timerTDs = (
+                <tr>
+                    <td>{this.props.entry.title}</td>
+                    <td>{this.props.entry.time}</td>
+                    <td>{this.props.entryCycleList[this.props.entry.cycle]}</td>
+                    <td className="text-center">
+                        <input
+                            onChange={this.toggleTimeout}
+                            type="checkbox"
+                            value={this.props.entry.id}
+                            checked={this.props.entry.active}
+                        />
+                    </td>
+                    <td className="text-center">
+                        <TimeDisplay targetTime={timeDisplay} showSeconds={this.props.showSeconds} />
+                    </td>
+                    <td>
+                        <button
+                            className="btn btn-xs"
+                            onClick={this.removeTimer}
+                        >
+                            <Glyphicon glyph="remove" />
+                        </button>
+                    </td>
+                </tr>
+            );
+        }
 
         return (
-            <tr>
-                <td>{this.props.entry.title}</td>
-                <td>{this.props.entry.time}</td>
-                <td>{this.props.entryCycleList[this.props.entry.cycle]}</td>
-                <td className="text-center">
-                    <input
-                        onChange={this.toggleTimeout}
-                        type="checkbox"
-                        value={this.props.entry.id}
-                        checked={this.props.entry.active}
-                    />
-                </td>
-                <td className="text-center">
-                    <TimeDisplay targetTime={timeDisplay} showSeconds={this.props.showSeconds} />
-                </td>
-                <td>
-                    <button
-                        className="btn btn-xs"
-                        onClick={this.removeTimer}
-                    >
-                        <Glyphicon glyph="remove" />
-                    </button>
-                </td>
-            </tr>
+            <React.Fragment>
+                {timerTDs}
+            </React.Fragment>
         );
     }
 }

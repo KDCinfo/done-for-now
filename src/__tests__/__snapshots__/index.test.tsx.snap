@@ -408,6 +408,28 @@ exports[`TimerBox: Jest Snapshot 1`] = `
                   className="timers-div"
                 >
                   <div
+                    className="text-right hidden"
+                  >
+                    <small>
+                      <label>
+                        Show '
+                        <a
+                          href="https://kdcinfo.github.io/expired-to-be/"
+                          target="kdcNewWindow"
+                          title="Expired To Be is an expiration reminder app with alarms (instead of timers)."
+                        >
+                          Expired To Be
+                        </a>
+                        ' alarms. 
+                        <input
+                          checked={true}
+                          onChange={[Function]}
+                          type="checkbox"
+                        />
+                      </label>
+                    </small>
+                  </div>
+                  <div
                     className="table-responsive"
                   >
                     <table

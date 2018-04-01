@@ -142,8 +142,10 @@ class TimerBox extends React.Component<{}, TimerBoxState> {
         // 'this.state.timeoutQueue' should already be empty [] ( per constructor's this.state = {} )
 
         if (stateTimerList.length > 0) {
-            stateTimerList.forEach( (elem: {id: number, active: boolean}) => {
-                if (elem.active === true) {
+            stateTimerList.forEach( (elem: {id: number, active: boolean, timeOfDay?: string}) => {
+
+                // The `timeOfDay` property only exists when TimerBox is used as an 'Alarms API'.
+                if (elem.active === true && (typeof(elem.timeOfDay) === 'undefined')) {
                     global.setTimeout(
                         () => {                                     // WHen these are not staggered, only 1 shows in the 'timerDisplay' code/layout.
                             this.addRemoveTimeout(elem.id, 'add');  // And although setTimeout({},0) fixes this, it is not the best solution.
